@@ -10,18 +10,13 @@ DESIRED_NODES=5  # The desired number of nodes you want to scale to
 
 # Function to scale up the nodes
 scaleUp() {
-  aws parallelcluster update-compute-fleet \
-    --cluster-name $CLUSTER_NAME \
-    --status "START_REQUESTED"
-  
-  aws parallelcluster update-compute-resources \
-    --cluster-name $CLUSTER_NAME \
-    --queue-name $QUEUE_NAME \
-    --compute-resource-name $COMPUTE_RESOURCE \
-    --min $MIN_NODES \
-    --max $MAX_NODES \
-    --desired $DESIRED_NODES \
-    --region us-east-1
+  aws ec2 modify-instance-attribute \
+    --instance-id $(aws ec2 describe-instances --filters "Name=tag:aws:parallelcluster:cluster-name,Values=$CLUSTER_NAME" "Name=tag:aws:parallelcluster:queue-name,Values=$QUEUE_NAME" "Name=tag:aws:parallelcluster:compute-resource-name,Values=$COMPUTE_RESOURCE" --query "Reservations[*].Instances[*].InstanceId" --output text) \
+    --region us-east-1 \
+    --instance-type $COMPUTE_RESOURCE \
+    --min-count $MIN_NODES \
+    --max-count $MAX_NODES \
+    --desired-count $DESIRED_NODES
 }
 
 # Call the function
