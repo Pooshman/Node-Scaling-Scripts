@@ -12,9 +12,15 @@ DESIRED_NODES=5  # The desired number of nodes you want to scale to
 scaleUp() {
   aws parallelcluster update-compute-fleet \
     --cluster-name $CLUSTER_NAME \
-    --compute-resources \
-    "[{\"Name\":\"$COMPUTE_RESOURCE\",\"MinCount\":$MIN_NODES,\"MaxCount\":$MAX_NODES,\"DesiredCount\":$DESIRED_NODES}]" \
+    --status "START_REQUESTED"
+  
+  aws parallelcluster update-compute-resources \
+    --cluster-name $CLUSTER_NAME \
     --queue-name $QUEUE_NAME \
+    --compute-resource-name $COMPUTE_RESOURCE \
+    --min $MIN_NODES \
+    --max $MAX_NODES \
+    --desired $DESIRED_NODES \
     --region us-east-1
 }
 
