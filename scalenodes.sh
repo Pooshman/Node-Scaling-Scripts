@@ -9,16 +9,16 @@ MAX_NODES=10  # Maximum number of nodes
 DESIRED_NODES=5  # The desired number of nodes you want to scale to
 REGION="us-east-1"  # Specify your AWS region here
 
-# Get the Auto Scaling Group name for the compute resources
-ASG_NAME=$(aws ec2 describe-tags --filters "Name=resource-type,Values=auto-scaling-group" "Name=key,Values=parallelcluster:cluster-name" "Name=value,Values=$CLUSTER_NAME" "Name=key,Values=parallelcluster:compute-resource-name" "Name=value,Values=$COMPUTE_RESOURCE" --region $REGION --query "Tags[0].ResourceId" --output text)
+# Check the names for all the variables
+ALL_NAMES=$(aws ec2 describe-tags --filters "Name=resource-type,Values=auto-scaling-group" "Name=key,Values=parallelcluster:cluster-name" "Name=value,Values=$CLUSTER_NAME" "Name=key,Values=parallelcluster:compute-resource-name" "Name=value,Values=$COMPUTE_RESOURCE" --region $REGION --query "Tags[0].ResourceId" --output text)
 
-# Check if ASG_NAME is not empty
-if [ -z "$ASG_NAME" ]; then
-  echo "Failed to find Auto Scaling Group for the specified compute resource."
+# Check if ALL_NAMES is not empty
+if [ -z "$ALL_NAMES" ]; then
+  echo "Names are not correct or empty. Check the variables again."
   exit 1
 fi
 
-# Scale the Auto Scaling Group
+# Do the autoscaling
 aws autoscaling update-auto-scaling-group \
   --auto-scaling-group-name $ASG_NAME \
   --min-size $MIN_NODES \
