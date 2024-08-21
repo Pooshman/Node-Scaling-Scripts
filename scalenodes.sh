@@ -2,25 +2,23 @@
 
 # Variables
 CLUSTER_NAME="my-new-cluster-2"
-QUEUE_NAME="queue-1"  # The name of your Slurm queue
-COMPUTE_RESOURCE="queue-1-cr-1"  # The name of your compute resource within the queue
-MIN_NODES=0  # Minimum number of nodes (can be 0 to allow scaling down to zero)
-MAX_NODES=10  # Maximum number of nodes
-DESIRED_NODES=5  # The desired number of nodes you want to scale to
-REGION="us-east-1"  # Specify your AWS region here
+QUEUE_NAME="queue-1"
+COMPUTE_RESOURCE="queue-1-cr-1"
+MIN_NODES=0
+MAX_NODES=10
+DESIRED_NODES=5
+REGION="us-east-1"
 
 # Function to scale up the nodes
 scaleUp() {
   aws ec2 modify-instance-attribute \
-    --instance-id $(aws ec2 describe-instances --filters "Name=tag:aws:parallelcluster:cluster-name,Values=$CLUSTER_NAME" "Name=tag:aws:parallelcluster:queue-name,Values=$QUEUE_NAME" "Name=tag:aws:parallelcluster:compute-resource-name,Values=$COMPUTE_RESOURCE" --query "Reservations[*].Instances[*].InstanceId" --output text --region $REGION) \
     --region $REGION \
-    --instance-type $COMPUTE_RESOURCE \
-    --min-count $MIN_NODES \
-    --max-count $MAX_NODES \
-    --desired-count $DESIRED_NODES
+    --instance-id $INSTANCE_ID \
+    --attribute instanceType \
+    --value $COMPUTE_RESOURCE
 }
 
-# Call the function
+# Call the function to scale up the nodes
 scaleUp
 
 # Check if the scaling was successful
