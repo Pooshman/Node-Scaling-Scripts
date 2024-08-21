@@ -9,21 +9,22 @@ MAX_NODES=10  # Maximum number of nodes
 DESIRED_NODES=5  # The desired number of nodes you want to scale to
 REGION="us-east-1"  # Specify your AWS region here
 
-# Function to scale up the nodes
-scaleUp() {
-  aws parallelcluster update-compute-fleet \
-    --cluster-name $CLUSTER_NAME \
-    --region $REGION \
-    --status RUNNING
+# Get the Auto Scaling Group name for the compute resources
+ASG_NAME=$(aws ec2 describe-tags --filters "Name=resource-type,Values=auto-scaling-group" "Name=key,Values=parallelcluster:cluster-name" "Name=value,Values=$CLUSTER_NAME" "Name=key,Values=parallelcluster:compute-resource-name" "Name=value,Values=$COMPUTE_RESOURCE" --region $REGION --query "Tags[0].ResourceId" --output text)
 
-  aws parallelcluster update-compute-fleet \
-    --cluster-name $CLUSTER_NAME \
-    --region $REGION \
-    --compute-resources "[{\"Name\":\"$COMPUTE_RESOURCE\",\"MinCount\":$MIN_NODES,\"MaxCount\":$MAX_NODES,\"DesiredCount\":$DESIRED_NODES}]"
-}
+# Check if ASG_NAME is not empty
+if [ -z "$ASG_NAME" ]; then
+  echo "Failed to find Auto Scaling Group for the specified compute resource."
+  exit 1
+fi
 
-# Call the function
-scaleUp
+# Scale the Auto Scaling Group
+aws autoscaling update-auto-scaling-group \
+  --auto-scaling-group-name $ASG_NAME \
+  --min-size $MIN_NODES \
+  --max-size $MAX_NODES \
+  --desired-capacity $DESIRED_NODES \
+  --region $REGION
 
 # Check if the scaling was successful
 if [ $? -eq 0 ]; then
@@ -31,4 +32,3 @@ if [ $? -eq 0 ]; then
 else
   echo "Failed to scale the compute nodes."
 fi
-
