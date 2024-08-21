@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-CLUSTER_NAME="my-new-cluster-2"
+CLUSTER_NAME="my-cluster-3"
 QUEUE_NAME="queue-1"
 COMPUTE_RESOURCE="queue-1-cr-1"
 MIN_NODES=0
