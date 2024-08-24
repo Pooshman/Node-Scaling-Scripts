@@ -10,5 +10,8 @@
 # module load snakemake (if needed)
 # source activate your_env (if needed)
 
+# Change directory to where your Snakemake workflow is located
+cd /path/to/your/snakemake/workflow
+
 # Run Snakemake with SLURM as the scheduler
-snakemake --snakefile Snakefile --jobs 100 --cluster "sbatch --cpus-per-task={threads} --mem={resources.mem_mb} --time={resources.time}" --cluster-config cluster.yaml
+snakemake --snakefile Snakefile --jobs 100 --cluster "sbatch --cpus-per-task={threads} --mem={resources.mem_mb} --time={resources.time}" --cluster-config config.yaml
