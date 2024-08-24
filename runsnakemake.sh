@@ -1,17 +1,16 @@
 #!/bin/bash
 #SBATCH --job-name=snakemake_job
-#SBATCH --nodes=5                # Request 5 nodes
-#SBATCH --ntasks-per-node=1      # 1 task per node
-#SBATCH --cpus-per-task=4        # Number of CPUs per task
-#SBATCH --time=01:00:00          # Time limit (e.g., 1 hour)
-#SBATCH --output=snakemake_output_%j.txt  # Output file
+#SBATCH --nodes=5
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --time=01:00:00
+#SBATCH --output=snakemake_output_%j.txt
 
-# Load necessary modules or activate your environment
-# module load snakemake (if needed)
-# source activate your_env (if needed)
+# Activate your Snakemake environment
+source activate your_snakemake_env
 
-# Change directory to where your Snakemake workflow is located
+# Change to the directory where the Snakefile is located
 cd /path/to/your/snakemake/workflow
 
-# Run Snakemake with SLURM as the scheduler
-snakemake --snakefile Snakefile --jobs 100 --cluster "sbatch --cpus-per-task={threads} --mem={resources.mem_mb} --time={resources.time}" --cluster-config config.yaml
+# Run Snakemake with the SLURM profile
+snakemake --snakefile Snakefile --jobs 100 --profile config/slurm
