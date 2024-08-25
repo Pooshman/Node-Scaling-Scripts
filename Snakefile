@@ -1,15 +1,14 @@
-# Sample Snakefile
-
 # Define the input and output files
 rule all:
     input:
         "results/output.txt"
 
-# Example rule to generate output.txt
-rule generate_output:
+# Rule to execute staticnodes.sh script on all nodes
+rule execute_staticnodes:
     output:
         "results/output.txt"
     shell:
         """
-        echo "This is a sample output" > {output}
+        sbatch staticnodes.sh
+        touch {output}
         """
