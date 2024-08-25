@@ -7,10 +7,13 @@
 #SBATCH --output=snakemake_output_%j.txt
 
 # Activate your Snakemake environment
-source activate your_snakemake_env
+#conda activate snakemake
 
 # Change to the directory where the Snakefile is located
-cd /path/to/your/snakemake/workflow
+#cd (Snakefile directory)
+
+#NOTE: The activate and cd commands could be implemented downline for streamlining (auto commands). 
+#Also add miniforge3 miniconda3 installation commands
 
 # Run Snakemake with the SLURM profile
 snakemake --snakefile Snakefile --jobs 100 --profile config/slurm
