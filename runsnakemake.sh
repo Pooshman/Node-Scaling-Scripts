@@ -10,7 +10,7 @@
 conda activate snakemake
 
 # Change to the directory where the Snakefile is located
-cd Test-Scripts/
+#cd Test-Scripts/
 
 #NOTE: The activate and cd commands could be implemented downline for streamlining (auto commands). 
 #Also add miniforge3 miniconda3 installation commands
