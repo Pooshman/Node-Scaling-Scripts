@@ -1,53 +1,32 @@
-# config.yaml
+# config.yaml for Snakemake with SLURM
 
-# The profile settings
+# SLURM settings
 slurm:
-  # Default values for SLURM commands
   slurm:
-    # SLURM job options
-    partition: 'default'
+    partition: 'queue-1'  # Adjust this to your SLURM partition name
     nodes: 1
     ntasks-per-node: 1
-    cpus-per-task: 1
-    mem: '1G'
-    time: '00:10:00'
+    cpus-per-task: 4
+    mem: '4G'
+    time: '01:00:00'
     
-  # SLURM cluster settings
   cluster:
-    # The command to submit a job
     command: 'sbatch'
-    
-    # The command to check the status of a job
     status: 'squeue -j {job_id}'
-    
-    # The command to cancel a job
     cancel: 'scancel {job_id}'
-    
-    # The command to get information about job nodes
     nodes: 'scontrol show hostname {job_id}'
     
-  # Default job submission settings
   default:
-    # Number of jobs to submit simultaneously
     jobs: 100
-    # Maximum number of threads for each job
     max_threads: 8
 
-  # Custom environment settings
-  env:
-    # Path to the Conda environment to activate
-    conda_env: 'your_snakemake_env'
-    
-    # Path to the Conda executable
-    conda_executable: '/path/to/conda'
-    
-    # Path to the Conda configuration file
-    conda_config: '/path/to/conda/config.yaml'
+# Conda settings
+env:
+  conda_env: 'snakemake'
+  conda_executable: '/home/ubuntu/miniconda3/bin/conda'  # Replace with actual path from `which conda`
+  conda_config_path: '/home/ubuntu/.condarc'  # Replace with actual path if needed
 
-# Additional settings
+# Paths to important files
 additional:
-  # Path to the Snakefile
   snakefile: 'Snakefile'
-  
-  # Path to the static nodes script
   static_nodes_script: 'staticnodes.sh'
