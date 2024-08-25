@@ -2,19 +2,15 @@
 #SBATCH --job-name=snakemake_job
 #SBATCH --nodes=5
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=4
 #SBATCH --time=00:10:00
 #SBATCH --output=snakemake_output_%j.txt
 
 # Activate your Snakemake environment
+source ~/.bashrc
 conda activate snakemake
 
-# Change to the directory where the Snakefile is located
-#cd Test-Scripts/
+# Run Snakemake (no profile needed)
+snakemake --snakefile Snakefile --jobs 100
 
-#NOTE: The activate and cd commands could be implemented downline for streamlining (auto commands). 
-#Also add miniforge3 miniconda3 installation commands
-
-# Run Snakemake
-snakemake --snakefile Snakefile --jobs 5 --profile config/slurm
 
