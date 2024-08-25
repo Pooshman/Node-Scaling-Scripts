@@ -7,8 +7,6 @@
 #SBATCH --output=snakemake_output_%j.txt
 
 # Activate your Snakemake environment
-source ~/.bashrc
-conda activate snakemake
 
 # Run Snakemake (no profile needed)
 snakemake --snakefile Snakefile --jobs 100
