@@ -1,11 +1,19 @@
 #!/bin/bash
-#SBATCH --job-name=test_cmd    # Job name
-#SBATCH --ntasks=1             # Number of tasks (processes)
-#SBATCH --cpus-per-task=16     # Number of CPU cores per task
-#SBATCH --time=24:00:00        # Walltime
-#SBATCH --partition=queue-1    # SLURM partition to use
-#SBATCH --nodes=1              # Number of nodes
-#SBATCH --output=test_output.txt  # Output file
 
-# Command to test the `cmd` function
-python workflow/scripts/noconverge.py --cores 16 --mode fast --config config/config.yaml
+# Set variables
+cores=16
+mode="fast"
+config_path="config/config.yaml"
+num_threads=16
+
+# Snakemake command to test
+snakemake \
+    --cores $cores \
+    --config mode=$mode config_path=$config_path num_threads=$num_threads \
+    --use-conda \
+    --rerun-incomplete \
+    --cluster-config cluster.yaml \
+    --jobs $cores \
+    --keep-going \
+    --latency-wait 60 \
+    --cluster "sbatch -A your-account -p queue-1 --nodes=1 --ntasks=${num_threads} --time=24:00:00"
