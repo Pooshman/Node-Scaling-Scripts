@@ -2,7 +2,7 @@ __default__:
     time: "00:10:00"
     nodes: 1
     ntasks-per-node: 1
-    partition: default
+    partition: "queue-1"
 
 rule example:
     time: "00:05:00"
