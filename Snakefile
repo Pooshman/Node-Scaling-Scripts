@@ -16,4 +16,4 @@ rule process_data:
     output:
         "results/processed_data.txt"
     shell:
-        "sleep 10; echo 'Processing data' > {output}"
+        "sleep 60; echo 'Processing data' > {output}"  # Increased sleep duration
