@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-CLUSTER_NAME="my-cluster-3"
+CLUSTER_NAME="fresh-cluster"
 QUEUE_NAME="queue-1"  # The name of your Slurm queue
 COMPUTE_RESOURCE="queue-1-cr-1"  # The name of your compute resource within the queue
 MIN_NODES=0  # Minimum number of nodes
