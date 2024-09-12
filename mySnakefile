@@ -1,0 +1,29 @@
+configfile: "config.yaml"
+
+# Define input and output directories from config.yaml
+input_dir = config["input_dir"]
+output_dir = config["output_dir"]
+log_dir = config["log_dir"]
+
+# Rule to create necessary directories
+rule all:
+    input:
+        expand(output_dir + "{sample}.out", sample=glob_wildcards(input_dir + "{sample}.txt").sample)
+    log:
+        log_dir + "workflow.log"
+
+# Rule for processing text files in parallel (dummy task: count words)
+rule process_file:
+    input:
+        infile = input_dir + "{sample}.txt"
+    output:
+        outfile = output_dir + "{sample}.out"
+    threads: config["resources"]["default_threads"]
+    log:
+        log_dir + "{sample}.log"
+    shell:
+        """
+        echo "Processing {input.infile}" > {log}
+        wc -w {input.infile} > {output.outfile}
+        """
+
