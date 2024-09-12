@@ -1,17 +1,24 @@
+# run_snakemake.py
+
 import subprocess
 
-# Define Snakemake command
-cmd = [
-    "snakemake",
-    "--cores", "16",  # Total number of cores to use
-    "--jobs", "5",    # Number of jobs to submit at once
-    "--config", "mode=fast",  # Example configuration parameter
-    "--use-conda",
-    "--rerun-incomplete",
-    "--keep-going",
-    "--latency-wait", "60",
-    "--cluster", "sbatch -A your-account -p queue-1 --nodes={nodes} --ntasks-per-node={ntasks-per-node} --time={time}"
-]
+def main():
+    # Define Snakemake command
+    cmd = [
+        "snakemake",
+        "--cores", "5",  # Number of cores to use
+        "--config", "config.yaml",  # Path to the configuration file
+        "--use-conda",  # Use Conda for environment management
+        "--rerun-incomplete",  # Re-run incomplete jobs
+        "--jobs", "10",  # Maximum number of jobs to submit simultaneously
+        "--keep-going",  # Continue running other jobs if some fail
+        "--latency-wait", "60",  # Time to wait before checking for job completion
+        "--cluster-config", "cluster.yaml",  # Path to the cluster configuration file
+        "--cluster", "sbatch --nodes={cluster.nodes} --ntasks-per-node={cluster.ntasks-per-node} --time={cluster.time} --partition={cluster.partition}"
+    ]
+    
+    # Run Snakemake command
+    subprocess.run(cmd)
 
-# Run Snakemake command
-subprocess.run(cmd, check=True)
+if __name__ == "__main__":
+    main()
