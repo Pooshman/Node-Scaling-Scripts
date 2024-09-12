@@ -1,10 +1,19 @@
+# Snakefile
+
 rule all:
     input:
-        "results/output.txt"
+        "results/processed_data.txt"
 
-rule example:
+rule generate_data:
     output:
-        "results/output.txt"
+        "data/input_data.txt"
     shell:
-        "echo 'This is a test' > {output}"
+        "echo 'Generating input data' > {output}"
 
+rule process_data:
+    input:
+        "data/input_data.txt"
+    output:
+        "results/processed_data.txt"
+    shell:
+        "sleep 10; echo 'Processing data' > {output}"
