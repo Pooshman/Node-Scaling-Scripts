@@ -4,7 +4,7 @@
 slurm:
   slurm:
     partition: 'queue-1'  # Adjust this to your SLURM partition name
-    nodes: 5
+    nodes: 1
     ntasks-per-node: 1
     cpus-per-task: 4
     mem: '4G'
