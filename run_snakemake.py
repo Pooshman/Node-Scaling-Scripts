@@ -7,7 +7,6 @@ def main():
     cmd = [
         "snakemake",
         "--cores", "5",  # Number of cores to use
-        "--config", "config/config.yaml",  # Path to the configuration file
         "--use-conda",  # Use Conda for environment management
         "--rerun-incomplete",  # Re-run incomplete jobs
         "--jobs", "10",  # Maximum number of jobs to submit simultaneously
