@@ -29,6 +29,6 @@ rule process_files:
     shell:
         """
         echo "Processing {input}" > {output}
-        sleep 10  # Simulate processing
+        sleep 60  # Simulate a longer processing time (1 minute)
         echo "Completed processing {input}" >> {output}
         """
