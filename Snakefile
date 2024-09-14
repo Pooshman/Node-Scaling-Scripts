@@ -1,8 +1,5 @@
 # Snakefile to create input files and process them across 5 static nodes
 
-# Define the number of threads for parallel jobs
-threads: 1
-
 # Rule to generate all required input files
 rule generate_input_files:
     output:
@@ -26,7 +23,7 @@ rule process_files:
     output:
         "output_file_{i}.txt"
     resources:
-        mem="4G",  # Example of memory resource
+        mem_mb=4000,  # Example of memory resource in MB
         nodes=1   # Each job will run on 1 node
     threads: 1
     shell:
@@ -35,8 +32,3 @@ rule process_files:
         sleep 10  # Simulate processing
         echo "Completed processing {input}" >> {output}
         """
-
-# Define the order of rule execution
-workflow:
-    # Ensure input files are generated before processing
-    generate_input_files >> process_files
