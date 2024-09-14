@@ -6,7 +6,7 @@ rule generate_input_files:
         expand("input_file_{i}.txt", i=range(1, 6))  # Creates 5 input files
     shell:
         """
-        for i in {1..5}; do
+        for i in $(seq 1 5); do
             echo "This is input file $i" > input_file_$i.txt
         done
         """
