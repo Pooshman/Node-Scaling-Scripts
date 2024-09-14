@@ -1,18 +1,20 @@
 #!/bin/bash
 
-# Activate the conda environment with Snakemake
-source activate snakemake
+# Set SLURM options
+#SBATCH --job-name=snakemake_workflow  # Job name
+#SBATCH --output=snakemake_%j.log     # Output log file
+#SBATCH --error=snakemake_%j.err      # Error log file
+#SBATCH --nodes=5                     # Request 5 nodes
+#SBATCH --ntasks-per-node=1           # One task per node
+#SBATCH --cpus-per-task=1             # One CPU per task
+#SBATCH --mem=4G                      # Memory per node
+#SBATCH --time=01:00:00               # Time limit (hh:mm:ss)
 
-# Define the number of nodes and jobs
-NODES=5
-JOBS=5
 
-# Run Snakemake with SLURM cluster submission
-snakemake \
-    --executor cluster-generic \
-    --cluster-generic-submit-cmd 'sbatch --job-name={rule} --ntasks={threads} --mem={resources.mem} --cpus-per-task={threads} --nodes=1 --output=slurm-%j.out --error=slurm-%j.err' \
-    --jobs $JOBS \
-    --use-conda \
-    --keep-going \
-    --latency-wait 60 \
-    --resources nodes=$NODES
+# Run Snakemake with SLURM executor
+snakemake --executor slurm \
+          --jobs 5 \
+          --use-conda \
+          --keep-going \
+          --latency-wait 60 \
+          --verbose
